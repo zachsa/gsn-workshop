@@ -26,6 +26,32 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
 
 ## cURL
 
+### Look at the raw output
+> Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json", and make the result (which is JSON) readable:
+
+```sh
+```
+
+### Get a list of tier3 files 
+
+```
+Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json". The result is an array of objects, each of which looks something like this:
+
+{
+    "parent": "/somisana/algoa-bay/5-day-forecast",
+    "path": "/somisana/algoa-bay/5-day-forecast/202307/20230714-hourly-avg-t3.nc",
+    "v": 1,
+    "entry": "20230714-hourly-avg-t3.nc",
+    "isFile": true,
+    "isDirectory": false,
+    "size": 1054370784
+}
+
+Filter out objects where the "entry" key, which is a filename, ends with "*-t3.nc". Output a list of files, with the full download url included in each filename (the path to the file must be prefixed with "https://mnemosyne.somisana.ac.za"). And output the list of files to "files.txt"
+
+curl -H "Accept: application/json" https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 | jq -r '.[] | select(.entry | endswith("-t3.nc")) | "https://mnemosyne.somisana.ac.za" + .path + "/" + .entry' > files.txt
+
+```
 ## [requests](https://pypi.org/project/requests/)
 
 ## Concurrent requests
