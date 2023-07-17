@@ -12,9 +12,10 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
     - [A simple Python web server (HTML over HTTP)](#a-simple-python-web-server-html-over-http)
   - [The TCP/IP model](#the-tcpip-model)
     - [A simple Python TCP server](#a-simple-python-tcp-server)
-  - [Examples of content served over HTTP](#examples-of-content-served-over-http)
-- [cURL-based download workflow](#curl-based-download-workflow)
-    - [Now download each of these in turn](#now-download-each-of-these-in-turn)
+  - [What content is available via HTTP?](#what-content-is-available-via-http)
+- [HTTP](#http)
+  - [The `cURL` HTTP client](#the-curl-http-client)
+- [Python](#python)
   - [requests](#requests)
   - [Concurrent requests](#concurrent-requests)
   - [Rate-limited concurrent requests](#rate-limited-concurrent-requests)
@@ -132,7 +133,7 @@ while True:
 
 This example, unlike the server above, does not include the HTTP application layer. As such going to http://localhost:1234 will not work as browsers and other HTTP clients are tools for navigating **_content/resources_** such as served over application layer protocols (`http(s)`/`WebSockets`/`WebRTC`), and don't directly handle how that content is transferred. And that is the context of this tutorial - **_consuming content over HTTP_**.
 
-## Examples of content served over HTTP
+## What content is available via HTTP?
 `WebRTC`/`Websockets` are the basis for realtime communication / video conferencing / chat applications (i.e. WhatsApp). In terms of downloading files, the HTTP(S) protocol is dominant (actually... FTP and other protocols are also applicable here but I don't know much about these). Here are some of the types of content accessed/transferred over HTTP:
 
 - HTML Documents
@@ -144,14 +145,82 @@ This example, unlike the server above, does not include the HTTP application lay
 - Form data (like a contact or login form)
 - Many other Media and Files (hundreds or thousands of different types of files and formats)
 
-# cURL-based download workflow
+# HTTP
+Let's ask an HTTP file server for a file listing (using the address https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307):
+
+```txt
++------------------------------------------------------+
+| Dear File Server,                                    |
+|                                                      |
+| I would like to request the file list from your      |
+| server located at:                                   |
+|                                                      |
+|    mnemosyne.somisana.ac.za                          |
+|                                                      |
+| The specific file I'm interested in is available at: |
+|                                                      |
+|    /somisana/algoa-bay/5-day-forecast/202307         |
+|                                                      |
+| I kindly request you to provide the file to me.      |
+|                                                      |
+| Please ensure the response is in JSON format.        |
+|                                                      |
+| Thank you!                                           |
++------------------------------------------------------+
+```
+
+And slightly more technical:
+
+```txt
++-------------------------------------------------------+
+| Dear File Server.                                     |
+|                                                       |
+| I want to "GET" your file list from the Host          |
+|    mnemosyne.somisana.ac.za                           |
+| At the path:                                          |
+|   /somisana/algoa-bay/5-day-forecast/202307 HTTP/1.1| |
+|                                                       |
+| Not the following!                                    |
+|   User-Agent: Mozilla/5.0                             |
+|   Accept-Language: en-US,en;q=0.9                     |
+|   Accept: application/json                            |
+|                                                       |
+| LETTER CONTENT (BODY)                                 |
+| ... You shouldn't need more information than above    |
++-------------------------------------------------------+
+```
+
+And actually in HTTP speak (the left column is byte offset):
+
+```txt
++-------------------------------------------------------+
+| POSTMARK (START LINE)                                 |
+| GET /somisana/algoa-bay/5-day-forecast/202307 HTTP/1.1|
+| Host: mnemosyne.somisana.ac.za                        |
+|                                                       |
+| ENVELOPE (HEADERS)                                    |
+| User-Agent: Mozilla/5.0                               |
+| Accept-Language: en-US,en;q=0.9                       |
+| Accept: application/json                              |
+|                                                       |
+| LETTER CONTENT (BODY)                                 |
+|                                                       |
+|                                                       |
++-------------------------------------------------------+
+```
+
+## The `cURL` HTTP client
+This command via `cURL` looks like this (piped to `jq` to prettify the output):
+
 **_(1) Get a file listing_**
-> Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json", and make the result (which is JSON) readable
->
->Format the cURL command over multiple lines to make it easier to read.
 
 ```sh
+# PROMPT
+# Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json", and make the result (which is JSON) readable. Format the cURL command over multiple lines to make it easier to read using jq.
+
+# CMD
 curl \
+  --silent \
   -X GET \
   -H "Accept: Application/json" \
   https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 \
@@ -159,72 +228,53 @@ curl \
 ```
 
 **_(2) Let's only look at the tier3 files_**
->That command outputs an array of objects, each of which looks something like this:
->
-> {
-  "parent": "/somisana/algoa-bay/5-day-forecast",
-  "path": "/somisana/algoa-bay/5-day-forecast/202307/20230712-hourly-avg-t3.nc",
-  "v": 1,
-  "entry": "20230712-hourly-avg-t3.nc",
-  "isFile": true,
-  "isDirectory": false,
-  "size": 1054370784
-}
->
->Extend the command to filter the output to only include objects where the entry ends with the string "-t3.nc", and output the "path" value of each object, prefixed with the base URL, to a line in a file called "files.txt"
-
 ```sh
+# PROMPT
+#That command outputs an array of objects, each of which looks something like this: {"parent": "/somisana/algoa-bay/5-day-forecast", "path": "/somisana/algoa-bay/5-day-forecast/202307/20230712-hourly-avg-t3.nc", "v": 1, "entry": "20230712-hourly-avg-t3.nc", "isFile": true, "isDirectory": false, "size": 1054370784}. Extend the command to filter the output to only include objects where the entry ends with the string "-t3.nc", and output the "path" value of each object, prefixed with the hostname of the request
+
 curl \
+  --silent \
   -X GET \
-  -H "Accept: Application/json" \
+  -H "Accept: application/json" \
   https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 \
-    | jq -r '.[] | select(.entry | endswith("-t3.nc")) | "https://mnemosyne.somisana.ac.za\(.path)"' \
-      > files.txt
+    | jq -r '.[] | select(.entry | endswith("-t3.nc")) | .path' \
+    | sed "s|^|https://mnemosyne.somisana.ac.za|"
 ```
 
 **_(3) Now download the list of files to output/*-t3.nc_**
->Extend that command so that the output is used as input to another cURL command that downloads each file to output/ (which should be created if it doesn't exist or recreated if it does):
-
 ```sh
+# PROMPT
+# Extend that command so that the output is used as input to another cURL command that downloads each file to a directory called "output/" (which should be created if it doesn't exist or recreated if it does)
+
+# CMD
 mkdir -p output && rm -rf output/* \
 && curl \
+  --silent \
   -X GET \
   -H "Accept: Application/json" \
   https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 \
   | jq -r '.[] | select(.entry | endswith("-t3.nc")) | "https://mnemosyne.somisana.ac.za\(.path)"' \
-  | while read url; do curl -o output/$(basename "$url") "$url"; done
+  | while read url; do curl --progress-bar -o output/$(basename "$url") "$url"; done
 ```
 
-**_(3.1) Speed up the process by downloading the files concurrently_**
->Adjust that command to download the files concurrently
-
+**_(4) Speed up the process by downloading the files concurrently_**
 ```sh
+# PROMPT
+# Adjust that command to download the files concurrently 
+
 mkdir -p output && rm -rf output/* \
 && curl \
+  --silent \
   -X GET \
   -H "Accept: Application/json" \
   https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 \
   | jq -r '.[] | select(.entry | endswith("-t3.nc")) | "https://mnemosyne.somisana.ac.za\(.path)"' \
-  | while read url; do (curl -o output/$(basename "$url") "$url" &); done; wait
+  | xargs -P 10 -I {} sh -c 'curl --silent -o output/$(basename {}) {}'
 ```
 
-**_(3.2) Limit the number of concurrent downloads_**
->Limit the number of concurrent downloads to be 4 at a time:
+But... the logging is poor in this case (I added the `--silent` flag to suppress it) and it's actually necessary to queue downloads. And while I'm sure that there is some bash command configuration that allows for this, I think it's time to move to a scripting environment such as Python or Node.js.
 
-```sh
-mkdir -p output && rm -rf output/* \
-&& curl \
-  -X GET \
-  -H "Accept: Application/json" \
-  https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 \
-  | jq -r '.[] | select(.entry | endswith("-t3.nc")) | "https://mnemosyne.somisana.ac.za\(.path)"' \
-  | xargs -n 1 -P 4 -I {} bash -c 'curl -o output/$(basename "{}") "{}"'
-```
-
-### Now download each of these in turn
-
-> Now give me a shell script that will loop over the files.txt lines, and download each to "output/"
-
+# Python
 
 ## [requests](https://pypi.org/project/requests/)
 
