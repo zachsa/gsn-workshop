@@ -4,9 +4,15 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+**Table of Contents**
 
+- [Initial setup](#initial-setup)
 - [HTTP and the TCP/IP internet stack](#http-and-the-tcpip-internet-stack)
+  - [The OSI model](#the-osi-model)
+    - [A simple Python web server (HTML over HTTP)](#a-simple-python-web-server-html-over-http)
+  - [The TCP/IP model](#the-tcpip-model)
+    - [A simple Python TCP server](#a-simple-python-tcp-server)
+  - [Examples of content served over HTTP](#examples-of-content-served-over-http)
 - [cURL-based download workflow](#curl-based-download-workflow)
     - [Now download each of these in turn](#now-download-each-of-these-in-turn)
   - [requests](#requests)
@@ -18,11 +24,125 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# HTTP and the TCP/IP internet stack
-`cURL` (Client for URLs) is an HTTP client for POSIX systems. Most Linux OSes have this installed by default. In addition, the following software is required for this workshop:
+# Initial setup
+This tutorial assumes `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
+```sh
+sudo apt update
 
-- Python v3.10.6 (similar versions will probably work fine)
-- `jq`, a lightweight JSON processor (`sudo apt update && sudo apt install jq -y`)
+# Install jq, a JSON wrangler
+sudo apt install jq -y
+```
+
+# HTTP and the TCP/IP internet stack
+I was taught to think of web development in terms of layers, with each layer an abstraction over various parts of the software and physical components of web-related infrastructure. Basically, it's nice to think in terms of models to represent how information is transferred between computers.
+
+## The OSI model
+
+```txt
+          OSI MODEL                       PYTHON/NODE.JS APPLICATION PERSPECTIVE
+          ---------                       ------------------------------------
+7 | Application Layer      <----->   Python/Node.js APIs (HTTP, HTTPS, FTP etc)
+6 | Presentation Layer     <----->   Data Format (JSON, XML etc)
+5 | Session Layer          <----->   State Management, Connection Handling
+-------------------------------------------------------
+4 | Transport Layer        <----->   Managed by OS (TCP, UDP)
+3 | Network Layer          <----->   Managed by OS (IP, ICMP etc)
+2 | Data Link Layer        <----->   Managed by OS / Hardware
+1 | Physical Layer         <----->   Managed by Hardware (Ethernet, Wi-Fi)
+```
+
+### A simple Python web server (HTML over HTTP)
+[scripts/osi.py](scripts/osi.py)
+```Python
+import http.server
+import socketserver
+
+# Application Layer: Python's built-in http.server provides high-level API for HTTP
+class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        # Presentation Layer: The data sent and received by the server is formatted as HTTP (a text-based protocol)
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(bytes("Hello World!", "utf-8"))  # We are responding with simple text message
+
+# Transport Layer: Python's built-in socketserver provides the TCPServer class to handle TCP connections
+with socketserver.TCPServer(("localhost", 8000), MyHttpRequestHandler) as httpd:
+    # Session Layer: serve_forever starts the server and keeps the connection open
+    print("serving at port", 8000)
+    httpd.serve_forever()
+
+# Network, Data Link, and Physical Layers are handled by the operating system and network hardware
+# The Python program just sends and receives data as streams of bytes, without worrying about lower level details
+```
+
+## The TCP/IP model
+More specific to a typical website, which is implemented using the TCP transport protocol, there is the `TCP/IP model`:
+
+```txt
+TCP/IP MODEL                    PYTHON/NODE.JS APPLICATION PERSPECTIVE
+-------------                   ------------------------------------
+Application Layer   <----->    Python/Node.js APIs (HTTP, HTTPS, FTP etc)
+Transport Layer     <----->    Managed by OS (TCP, UDP)
+Internet Layer      <----->    Managed by OS (IP)
+Network Interface   <----->    Managed by OS / Hardware (Ethernet, Wi-Fi)
+```
+
+### A simple Python TCP server
+[scripts/tcp-ip.py](scripts/tcp-ip.py)
+```Python
+import socket
+
+# Application Layer: Python's built-in socket module provides a high-level API for TCP
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Network Interface Layer: Bind the socket to a specific network interface and port
+server_address = ('localhost', 12345)
+print('Starting up server on {} port {}'.format(*server_address))
+server_socket.bind(server_address)
+
+# Transport Layer: Listen for incoming connections (TCP provides reliable, ordered and error-checked delivery of a stream of bytes)
+server_socket.listen(1)
+
+while True:
+    # Wait for a connection
+    print('Waiting for a connection...')
+    client_socket, client_address = server_socket.accept()
+
+    try:
+        print('Connection from', client_address)
+
+        # Application Layer: Receive and send data over the connection
+        while True:
+            data = client_socket.recv(16)
+            print('Received {!r}'.format(data))
+            if data:
+                print('Sending data back to the client...')
+                client_socket.sendall(data)
+            else:
+                print('No more data from', client_address)
+                break
+
+    finally:
+        # Clean up the connection
+        client_socket.close()
+
+# Internet Layer: The details of routing data across the network are handled by the OS and are abstracted away by the socket API
+```
+
+This example, unlike the server above, does not include the HTTP application layer. As such going to http://localhost:1234 will not work as browsers and other HTTP clients are tools for navigating **_content/resources_** such as served over application layer protocols (`http(s)`/`WebSockets`/`WebRTC`), and don't directly handle how that content is transferred. And that is the context of this tutorial - **_consuming content over HTTP_**.
+
+## Examples of content served over HTTP
+`WebRTC`/`Websockets` are the basis for realtime communication / video conferencing / chat applications (i.e. WhatsApp). In terms of downloading files, the HTTP(S) protocol is dominant (actually... FTP and other protocols are also applicable here but I don't know much about these). Here are some of the types of content accessed/transferred over HTTP:
+
+- HTML Documents
+- CSS Stylesheets
+- JavaScript Files
+- Images
+- Videos and Audio
+- API Requests: including REST, GraphQL, ODATA, SOAP, and other formats
+- Form data (like a contact or login form)
+- Many other Media and Files (hundreds or thousands of different types of files and formats)
 
 # cURL-based download workflow
 **_(1) Get a file listing_**

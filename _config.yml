@@ -3,6 +3,6 @@ plugins:
   - jekyll-remote-theme
 
 title: GSN HTTP Workshop
-description: Performant file downloads using HTTP clients 
+description: Information over HTTP
 
 show_downloads: false
