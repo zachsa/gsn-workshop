@@ -227,6 +227,7 @@ curl \
 ```
 
 **_(2) Let's only look at the tier3 files_**
+
 ```sh
 # PROMPT
 #That command outputs an array of objects, each of which looks something like this: {"parent": "/somisana/algoa-bay/5-day-forecast", "path": "/somisana/algoa-bay/5-day-forecast/202307/20230712-hourly-avg-t3.nc", "v": 1, "entry": "20230712-hourly-avg-t3.nc", "isFile": true, "isDirectory": false, "size": 1054370784}. Extend the command to filter the output to only include objects where the entry ends with the string "-t3.nc", and output the "path" value of each object, prefixed with the hostname of the request
@@ -241,6 +242,7 @@ curl \
 ```
 
 **_(3) Now download the list of files to output/*-t3.nc_**
+
 ```sh
 # PROMPT
 # Extend that command so that the output is used as input to another cURL command that downloads each file to a directory called "output/" (which should be created if it doesn't exist or recreated if it does)
@@ -257,6 +259,7 @@ mkdir -p output && rm -rf output/* \
 ```
 
 **_(4) Speed up the process by downloading the files concurrently_**
+
 ```sh
 # PROMPT
 # Adjust that command to download the files concurrently 
@@ -288,6 +291,7 @@ python scripts/get_filepaths.py
 The [requests](https://pypi.org/project/requests/) library is not part of the std lib, but is a fairly popular HTTP client for Python.
 
 **_(1) Download each file synchronously_**
+
 The easiest way to download files in Python is one at a time! Let's ask ChatGPT to give us a function that does that. Here is the prompt:
 
 > In Python, given an array of URLs (that point to files), give me a function that will download each file to output/ (use the filename in the URL). First delete and recreate the output/ directory when running the function.
@@ -299,6 +303,7 @@ python scripts/synchronous_download.py
 ```
 
 **_(2) Download files concurrently_**
+
 Downloading several large files one at a time is quite slow - we can greatly improve this by working concurrently. Here is the prompt:
 
 > Adjust the following script to download all the files asynchronously using asyncio and aiohttp:
@@ -312,6 +317,7 @@ python scripts/async_download.py
 ```
 
 **_(3) Add queuing to configure max-concurrent requests_**
+
 Downloading files concurrently is fast, but trying to download too many files at once will not work for a variety of reasons. Many data providers (such as NOAA) rate-limit by IP and if you exceed that you get blocked and can no longer download data. Let's avoid that; here is the prompt:
 
 > Adjust the following script to implement queuing using the asyncio library:
