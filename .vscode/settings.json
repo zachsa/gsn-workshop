@@ -1,6 +1,8 @@
 {
   "cSpell.words": [
+    "aiohttp",
     "algoa",
+    "asyncio",
     "endswith",
     "INET",
     "ODATA",

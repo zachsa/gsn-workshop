@@ -16,12 +16,11 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
 - [HTTP](#http)
   - [The `cURL` HTTP client](#the-curl-http-client)
   - [A Python HTTP client](#a-python-http-client)
-    - [requests](#requests)
-    - [Concurrent requests](#concurrent-requests)
-    - [Rate-limited concurrent requests](#rate-limited-concurrent-requests)
-    - [Async file IO and atomicity](#async-file-io-and-atomicity)
 - [Dependency management](#dependency-management)
 - [Serverless website deployment (GitHub Pages)](#serverless-website-deployment-github-pages)
+  - [Let's generate some data](#lets-generate-some-data)
+  - [A quick website](#a-quick-website)
+  - [Deploy it!](#deploy-it)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -90,7 +89,7 @@ Network Interface   <----->    Managed by OS / Hardware (Ethernet, Wi-Fi)
 ```
 
 ### A simple Python TCP server
-[scripts/tcp-ip.py](scripts/tcp-ip.py)
+[scripts/tcp_ip.py](scripts/tcp_ip.py)
 ```Python
 import socket
 
@@ -272,20 +271,71 @@ mkdir -p output && rm -rf output/* \
   | xargs -P 10 -I {} sh -c 'curl --silent -o output/$(basename {}) {}'
 ```
 
-But... the logging is poor in this case (I added the `--silent` flag to suppress it) and it's actually necessary to queue downloads. And while I'm sure that there is some bash command configuration that allows for this, I think it's time to move to a scripting environment such as Python or Node.js.
+But... the logging is poor in this case (I added the `--silent` flag to suppress it) and it's actually necessary to queue downloads. And while I'm sure that there is some bash command configuration that allows for this, I think it's time to move to a scripting environment such as Python/Node.js/Ruby/C#/Java/Go/Rust/Erlang/C/or any one of a very large number of options.
 
 ## A Python HTTP client
+As a base, let's convert the previous `cURL` command for retrieving a file listing into a Python script. Here is the prompt:
 
-### [requests](https://pypi.org/project/requests/)
+> Convert this curl command into a Python function: curl --silent -X GET -H "Accept: application/json" https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 | jq -r '.[] | select(.entry | endswith("-t3.nc")) | .path' | sed "s|^|https://mnemosyne.somisana.ac.za|"
 
-### Concurrent requests
+ChatGPT suggests a reasonable function (in my case at least), that I've called [`get_filepaths`](/scripts/get_filepaths.py). To execute it, you first need to install the requests library:
 
-### Rate-limited concurrent requests
+```sh
+pip install requests
+python scripts/get_filepaths.py
+```
 
-### Async file IO and atomicity
+The [requests](https://pypi.org/project/requests/) library is not part of the std lib, but is a fairly popular HTTP client for Python.
+
+**_(1) Download each file synchronously_**
+The easiest way to download files in Python is one at a time! Let's ask ChatGPT to give us a function that does that. Here is the prompt:
+
+> In Python, given an array of URLs (that point to files), give me a function that will download each file to output/ (use the filename in the URL). First delete and recreate the output/ directory when running the function.
+
+Execute [scripts/synchronous_download.py](/scripts/synchronous_download.py) with the command:
+
+```sh
+python scripts/synchronous_download.py
+```
+
+**_(2) Download files concurrently_**
+Downloading several large files one at a time is quite slow - we can greatly improve this by working concurrently. Here is the prompt:
+
+> Adjust the following script to download all the files asynchronously using asyncio and aiohttp:
+> (and then copy/paste the contents of [/scripts/synchronous_download.py](/scripts/synchronous_download.py))
+
+Execute [scripts/async_download.py](/scripts/async_download.py) with the command:
+
+```sh
+pip install aiohttp # This is used instead of requests (which is sync only). asyncio is part of std lib
+python scripts/async_download.py
+```
+
+**_(3) Add queuing to configure max-concurrent requests_**
+Downloading files concurrently is fast, but trying to download too many files at once will not work for a variety of reasons. Many data providers (such as NOAA) rate-limit by IP and if you exceed that you get blocked and can no longer download data. Let's avoid that; here is the prompt:
+
+> Adjust the following script to implement queuing using the asyncio library:
+> (and copy/paste the contents of [/scripts/async_download.py](/scripts/async_download.py))
+
+Execute [scripts/async_with_queue.py](/scripts/async_with_queue.py) with the command:
+
+```sh
+python scripts/async_with_queue.py
+```
+
+And that's that!
 
 # Dependency management
 GitHub / GitLab, and other platforms provide free/shared task executors in the form of ephemeral virtual machines. These products are a natural fit for running Python code programmatically / on a scheduled basis as part of automated workflows, provided that works best when Python scripts are packages in such a way as to be portable. This requires that dependencies are managed explicitly - good practice even without the requirement of portable deployments, as (in my opinion) this leads to better-structured code.
  
 # Serverless website deployment ([GitHub Pages](https://pages.github.com/))
-Discuss what a website is in the context of HTML, and what that means in terms of the ability to quickly setup websites.
+
+## Let's generate some data
+Let's get some data from one of the downloads to display in a website chart.
+
+## A quick website
+TODO
+
+## Deploy it!
+
+
