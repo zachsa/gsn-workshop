@@ -15,11 +15,11 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
   - [What content is available via HTTP?](#what-content-is-available-via-http)
 - [HTTP](#http)
   - [The `cURL` HTTP client](#the-curl-http-client)
-- [A Python HTTP client](#a-python-http-client)
-  - [requests](#requests)
-  - [Concurrent requests](#concurrent-requests)
-  - [Rate-limited concurrent requests](#rate-limited-concurrent-requests)
-  - [Async file IO and atomicity](#async-file-io-and-atomicity)
+  - [A Python HTTP client](#a-python-http-client)
+    - [requests](#requests)
+    - [Concurrent requests](#concurrent-requests)
+    - [Rate-limited concurrent requests](#rate-limited-concurrent-requests)
+    - [Async file IO and atomicity](#async-file-io-and-atomicity)
 - [Dependency management](#dependency-management)
 - [Serverless website deployment (GitHub Pages)](#serverless-website-deployment-github-pages)
 
@@ -274,15 +274,15 @@ mkdir -p output && rm -rf output/* \
 
 But... the logging is poor in this case (I added the `--silent` flag to suppress it) and it's actually necessary to queue downloads. And while I'm sure that there is some bash command configuration that allows for this, I think it's time to move to a scripting environment such as Python or Node.js.
 
-# A Python HTTP client
+## A Python HTTP client
 
-## [requests](https://pypi.org/project/requests/)
+### [requests](https://pypi.org/project/requests/)
 
-## Concurrent requests
+### Concurrent requests
 
-## Rate-limited concurrent requests
+### Rate-limited concurrent requests
 
-## Async file IO and atomicity
+### Async file IO and atomicity
 
 # Dependency management
 GitHub / GitLab, and other platforms provide free/shared task executors in the form of ephemeral virtual machines. These products are a natural fit for running Python code programmatically / on a scheduled basis as part of automated workflows, provided that works best when Python scripts are packages in such a way as to be portable. This requires that dependencies are managed explicitly - good practice even without the requirement of portable deployments, as (in my opinion) this leads to better-structured code.
