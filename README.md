@@ -15,7 +15,7 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
   - [What content is available via HTTP?](#what-content-is-available-via-http)
 - [HTTP](#http)
   - [The `cURL` HTTP client](#the-curl-http-client)
-- [Python](#python)
+- [A Python HTTP client](#a-python-http-client)
   - [requests](#requests)
   - [Concurrent requests](#concurrent-requests)
   - [Rate-limited concurrent requests](#rate-limited-concurrent-requests)
@@ -274,7 +274,7 @@ mkdir -p output && rm -rf output/* \
 
 But... the logging is poor in this case (I added the `--silent` flag to suppress it) and it's actually necessary to queue downloads. And while I'm sure that there is some bash command configuration that allows for this, I think it's time to move to a scripting environment such as Python or Node.js.
 
-# Python
+# A Python HTTP client
 
 ## [requests](https://pypi.org/project/requests/)
 
