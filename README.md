@@ -24,6 +24,10 @@ HTTP is the language of the web - a formally defined protocol for exchanging web
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+# Resources
+- **_[The SAEON Data Portal](https://catalogue.saeon.ac.za)_**: Search and download SAEON's curated datasets
+- **_[Mnemosyne](https://mnemosyne.saeon.ac.za)_**: HTTP file server
+
 # Initial setup
 This tutorial assumes `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
 ```sh
@@ -31,6 +35,10 @@ sudo apt update
 
 # Install jq, a JSON wrangler
 sudo apt install jq -y
+
+# Install Python libs
+pip install requests
+pip install aiohttp
 ```
 
 # HTTP and the TCP/IP internet stack
@@ -281,7 +289,6 @@ As a base, let's convert the previous `cURL` command for retrieving a file listi
 ChatGPT suggests a reasonable function (in my case at least), that I've called [`get_filepaths`](/scripts/get_filepaths.py). To execute it, you first need to install the requests library:
 
 ```sh
-pip install requests
 python scripts/get_filepaths.py
 ```
 
@@ -307,7 +314,6 @@ Downloading several large files one at a time is quite slow - we can greatly imp
 Execute [scripts/async_download.py](/scripts/async_download.py) with the command:
 
 ```sh
-pip install aiohttp # This is used instead of requests (which is sync only). asyncio is part of std lib
 python scripts/async_download.py
 ```
 
@@ -334,7 +340,7 @@ GitHub / GitLab, and other platforms provide free/shared task executors in the f
 Let's get some data from one of the downloads to display in a website chart.
 
 ## A quick website
-TODO
+
 
 ## Deploy it!
 

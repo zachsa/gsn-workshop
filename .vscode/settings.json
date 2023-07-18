@@ -5,6 +5,7 @@
     "asyncio",
     "endswith",
     "INET",
+    "Mnemosyne",
     "ODATA",
     "sendall",
     "socketserver",
