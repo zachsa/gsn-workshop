@@ -329,10 +329,10 @@ As a base, let's convert the previous `cURL` command for retrieving a file listi
 
 > Convert this curl command into a Python function: curl --silent -X GET -H "Accept: application/json" https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 | jq -r '.[] | select(.entry | endswith("-t3.nc")) | .path' | sed "s|^|https://mnemosyne.somisana.ac.za|"
 
-ChatGPT suggests a reasonable function (in my case at least), that I've called [`get_filepaths`](/scripts/get_filepaths.py). To execute it, you first need to install the requests library:
+ChatGPT suggests a reasonable function (in my case at least), that I've called [`mnemosyne`](/scripts/mnemosyne.py). To execute it, you first need to install the requests library:
 
 ```sh
-python scripts/get_filepaths.py
+python scripts/mnemosyne.py
 ```
 
 The [requests](https://pypi.org/project/requests/) library is not part of the std lib, but is a fairly popular HTTP client for Python.
