@@ -1,0 +1,23 @@
+name: Remote Python script execution
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  scripting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@main
+        with:
+          ref: main
+      - name: Install Python dependency
+        run: |
+          pip install -r requirements.txt
+      - name: Run Python script
+        run: |
+          python script.py
+
+      

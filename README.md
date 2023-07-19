@@ -380,6 +380,14 @@ And that's that!
 
 # Dependency management
 GitHub / GitLab, and other platforms provide free/shared task executors in the form of ephemeral virtual machines. These products are a natural fit for running Python code programmatically / on a scheduled basis as part of automated workflows, provided that works best when Python scripts are packages in such a way as to be portable. This requires that dependencies are managed explicitly - good practice even without the requirement of portable deployments, as (in my opinion) this leads to better-structured code.
+
+In this repository, you can generate a list of dependencies using `pip freeze`:
+
+```sh
+pip freeze > requirements.txt
+```
+
+Commit this file to the git index so that it's accessible in deployment/execution environments in the future.
  
 # Serverless website deployment ([GitHub Pages](https://pages.github.com/))
 
