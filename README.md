@@ -1,7 +1,7 @@
-# How do these tools work and why
+# HTTP Party: A Quirky Adventure in Data Retrieval with cURL and Python
 When it comes to accessing data over the web programmatically, most data providers, including those I've encountered while working at SAEON, serve their content over the HTTP protocol. HTTP, the language of the web, is a formally defined protocol for exchanging web pages, files, and other information across dispersed IT infrastructure.
 
-In the workshop "How do these tools work and why," HTTP is explained in the context of accessing third-party data programmatically using Python and similar tools. We explore how to effectively download files from HTTP file servers and provide guidance on leveraging HTTP to retrieve data.
+In the workshop "HTTP Party: A Quirky Adventure in Data Retrieval with cURL and Python", HTTP is explained in the context of accessing third-party data programmatically using Python and similar tools. We explore how to effectively download files from HTTP file servers and provide guidance on leveraging HTTP to retrieve data.
 
 Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable techniques for programmatically accessing data, and explore the potential of leveraging tools like ChatGPT to generate code tailored to your needs. Whether you are a data enthusiast, developer, or researcher, this workshop equips you with practical knowledge and some useful code snippets as a future reference.
 

@@ -2,7 +2,7 @@ remote_theme: pages-themes/cayman@v0.2.0
 plugins:
   - jekyll-remote-theme
 
-title: GSN HTTP Workshop
-description: Information over HTTP
+title: HTTP Party
+description: A Quirky Adventure in Data Retrieval with cURL and Python
 
 show_downloads: false
