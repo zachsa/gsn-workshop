@@ -137,9 +137,48 @@ We can ask ChatGPT to re-annotate the above web server within the context of thi
 
 ```Python
 # PROMPT
-# Please provide a simple Python web server example using the built-in http.server and socketserver modules that illustrates which layers of the TCP/IP model Python can interact with? Please include comments in the code that explain which layer each part of the code corresponds to. The application layer protocol should be HTTP and respond with a file download located at the path specified by a user request (please stream the file back, don't load it into memory). Use the aiohttp library to implement the web server so that requests are handled concurrently.
+# Please provide a simple Python web server example that illustrates which layers of the TCP/IP model Python can interact with? Please include comments in the code that explain which layer each part of the code corresponds to. The application layer protocol should be HTTP and respond with a file download located at the path specified by a user request (please stream the file back, don't load it into memory). Use the aiohttp library to implement the web server so that requests are handled concurrently.
 
-# TODO
+from aiohttp import web
+import os
+
+# TCP/IP model:
+# Layer 4: Application Layer - HTTP
+# Layer 3: Transport Layer - TCP
+# Layer 2: Internet Layer - IP
+# Layer 1: Link Layer - Network Interface
+
+# This script specifically interacts with Layer 4 (HTTP Application Layer) and Layer 3 (TCP Transport Layer)
+
+
+async def file_download(request):
+    # Here's where we interact with the Application Layer (Layer 4). We're using HTTP protocol here to parse incoming request
+    filepath = request.match_info.get("filepath", "")
+
+    # Check if the file exists
+    if not os.path.isfile(filepath):
+        return web.Response(text="File not found", status=404)
+
+    # Open the file in binary mode, this doesn't load the file into memory
+    file_stream = web.FileResponse(path=filepath)
+
+    # Set the Content-Disposition header to "attachment" which prompts the browser to download the file
+    file_stream.headers[
+        "Content-Disposition"
+    ] = f'attachment; filename="{os.path.basename(filepath)}"'
+
+    # Respond with the file stream, the TCP (Transport Layer - Layer 3) will handle transmitting the data packets
+    return file_stream
+
+
+app = web.Application()
+# Routing to handle file download requests
+app.router.add_route("GET", "/{filepath:.*}", file_download)
+
+if __name__ == "__main__":
+    # Run the web application
+    # The underlying library would open a TCP socket (Layer 3) and listen for incoming connections
+    web.run_app(app, port=8080)
 ```
 
 This code implements a file server that delivers content over HTTP. The type of content that is served is varied (HTTP is flexible in this regard). For example, on a day-to-day basis most people consume the following content over HTTP:
@@ -154,6 +193,10 @@ This code implements a file server that delivers content over HTTP. The type of 
 - Many other Media and Files (hundreds or thousands of different types of files and formats)
 
 **_From the perspective of a file server, downloading a NetCDF file or downloading a website for viewing in a browser is conceptually similar. In both cases, the server receives a request for a specific file and responds by providing the requested content to the client. The underlying process of serving the files remains consistent regardless of the file type or the intended use._**
+
+In the context of this workshop, here is a prompt that will more or less generate an equivalent to the Mnemosyne file server where we will fetch all our data from:
+
+> Please provide a simple Python web server to respond to HTTP requests with a file download (as an attachment) located at the path specified by a user request. please stream the file back, don't load it into memory. Use the aiohttp library to implement the web server so that requests are handled concurrently.
 
 # HTTP clients
 During a recent conversation with a colleague, I inquired about his experience with sending letters by post. After pondering for a moment, he reminisced about his youth and mentioned sending a letter to his first girlfriend (he is 31).
