@@ -18,10 +18,8 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
   - [The `cURL` HTTP client](#the-curl-http-client)
   - [A Python HTTP client](#a-python-http-client)
 - [Dependency management](#dependency-management)
-- [Serverless website deployment (GitHub Pages)](#serverless-website-deployment-github-pages)
-  - [Let's generate some data](#lets-generate-some-data)
-  - [A quick website](#a-quick-website)
-  - [Deploy it!](#deploy-it)
+  - [Containerization](#containerization)
+- [And that's a wrap](#and-thats-a-wrap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -277,7 +275,7 @@ curl \
 
 ```sh
 # PROMPT
-#That command outputs an array of objects, each of which looks something like this: {"parent": "/somisana/algoa-bay/5-day-forecast", "path": "/somisana/algoa-bay/5-day-forecast/202307/20230712-hourly-avg-t3.nc", "v": 1, "entry": "20230712-hourly-avg-t3.nc", "isFile": true, "isDirectory": false, "size": 1054370784}. Extend the command to filter the output to only include objects where the entry ends with the string "-t3.nc", and output the "path" value of each object, prefixed with the hostname of the request
+# That command outputs an array of objects, each of which looks something like this: {"parent": "/somisana/algoa-bay/5-day-forecast", "path": "/somisana/algoa-bay/5-day-forecast/202307/20230712-hourly-avg-t3.nc", "v": 1, "entry": "20230712-hourly-avg-t3.nc", "isFile": true, "isDirectory": false, "size": 1054370784}. Extend the command to filter the output to only include objects where the entry ends with the string "-t3.nc", and output the "path" value of each object, prefixed with the hostname of the request
 
 curl \
   --silent \
@@ -387,16 +385,28 @@ In this repository, you can generate a list of dependencies using `pip freeze`:
 pip freeze > requirements.txt
 ```
 
-Commit this file to the git index so that it's accessible in deployment/execution environments in the future.
+Commit this file to the git index so that it's accessible in deployment/execution environments in the future. Then, on the server that you would like to execute your program (for example [script.py](/script.py)), first install dependencies listed in `requirements.txt` and then execute the program:
+
+```sh
+pip install -r requirements.txt
+python script.py
+```
+
+## Containerization
+Most operating systems come with Python installed. If a Python script makes use of 3rd party libraries or binaries that need to be prior-installed on a server there are a number of approaches to manage environments (instead of just Python dependencies). My favourite is via containerization (Docker).
+
+Dockerize (and run) [script.py](/script.py) with the following commands:
+
+```sh
+docker build -t gsn-tut .
+docker run --rm --name gsn gsn-tut
+```
  
-# Serverless website deployment ([GitHub Pages](https://pages.github.com/))
+# And that's a wrap
+Let me know if there are any questions! If there is still time, some ideas for next steps:
 
-## Let's generate some data
-Let's get some data from one of the downloads to display in a website chart.
-
-## A quick website
-
-
-## Deploy it!
+- Publish a repository as a website using GitHub pages. Yet another take on the typical HTTP file-serving stack, GitHub provides a mechanism for turning into repository into a beautiful website using [GitHub Pages](https://pages.github.com/). In this case your README.md file will either be formatted as a website (as is the case of this tutorial - https://zachsa.github.io/gsn-workshop/), or you can serve your own HTML / CSS / JS. 
+- We could generate a website with charts using ChatGPT (and GitHub pages)
+- We could look more into containerization Docker - how Docker works, and how to include it in GitHub Actions workflows
 
 
