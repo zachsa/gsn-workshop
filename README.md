@@ -15,6 +15,7 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
 - [HTTP and the TCP/IP internet stack](#http-and-the-tcpip-internet-stack)
     - [The TCP/IP model](#the-tcpip-model)
 - [HTTP clients](#http-clients)
+  - [Authentication](#authentication)
   - [The `cURL` HTTP client](#the-curl-http-client)
   - [A Python HTTP client](#a-python-http-client)
 - [Dependency management](#dependency-management)
@@ -296,6 +297,9 @@ And actually in HTTP speak:
 | NULL                                                  |
 +-------------------------------------------------------+
 ```
+
+## Authentication
+This tutorial uses the SAEON Mnemosyne server, which doesn't require authentication. There are many different authentication schemes, all of which boil down to including usernames/passwords/tokens/etc either in URL params of requests, HTTP headers, or within URLs (basic auth) in a series of HTTP requests to the resource server.
 
 ## The `cURL` HTTP client
 The letters above translate to a `cURL` command that looks like this (piped to `jq` to prettify the output):
