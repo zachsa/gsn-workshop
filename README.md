@@ -327,7 +327,9 @@ I think it's advantageous to transition to a scripting environment like Python, 
 ## A Python HTTP client
 As a base, let's convert the previous `cURL` command for retrieving a file listing into a Python script. Here is the prompt:
 
-> Convert this curl command into a Python function: curl --silent -X GET -H "Accept: application/json" https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 | jq -r '.[] | select(.entry | endswith("-t3.nc")) | .path' | sed "s|^|https://mnemosyne.somisana.ac.za|"
+```txt
+Convert this curl command into a Python function: curl --silent -X GET -H "Accept: application/json" https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307 | jq -r '.[] | select(.entry | endswith("-t3.nc")) | .path' | sed "s|^|https://mnemosyne.somisana.ac.za|"
+```
 
 ChatGPT suggests a reasonable function (in my case at least), that I've called [`mnemosyne`](/scripts/mnemosyne.py). To execute it, you first need to install the requests library:
 
@@ -341,7 +343,9 @@ The [requests](https://pypi.org/project/requests/) library is not part of the st
 
 The easiest way to download files in Python is one at a time! Let's ask ChatGPT to give us a function that does that. Here is the prompt:
 
-> In Python, given an array of URLs (that point to files), give me a function that will download each file to output/ (use the filename in the URL). First delete and recreate the output/ directory when running the function.
+```txt
+In Python, given an array of URLs (that point to files), give me a function that will download each file to output/ (use the filename in the URL). First delete and recreate the output/ directory when running the function.
+```
 
 Execute [scripts/download_sync.py](/scripts/download_sync.py) with the command:
 
@@ -352,6 +356,7 @@ python scripts/download_sync.py
 **_(2) Download files concurrently_**
 
 Downloading several large files one at a time is quite slow - we can greatly improve this by working concurrently. Here is the prompt:
+
 
 > Adjust the following script to download all the files asynchronously using asyncio and aiohttp:
 > (and then copy/paste the contents of [/scripts/download_sync.py](/scripts/download_sync.py))
