@@ -363,7 +363,7 @@ mkdir -p output && rm -rf output/* \
   | xargs -P 10 -I {} sh -c 'curl --silent -o output/$(basename {}) {}'
 ```
 
-However, the output (logging) in this case is terrible, and I had to resort to using the --silent flag in the download command (second `curl` command) to suppress it. Additionally, the need to queue downloads has become apparent. While it's possible that configuring a bash command could address these concerns, the resulting code may become increasingly convoluted and challenging to comprehend.
+However, the output (logging) in this case is terrible, and I had to resort to using the --silent flag in the download command (second `curl` command) to suppress it. Additionally, for concurrently downloading large lists of files, the need to be able limit concurrency (queue downloads) should be apparent. While it's possible that configuring a bash command could address these concerns, the resulting code may become increasingly convoluted and challenging to comprehend.
 
 I think it's advantageous to transition to a scripting environment like Python, Node.js, Ruby, C#, Java, Go, Rust, Erlang, C, or any of the numerous options available. These languages offer robust scripting capabilities and a wide range of libraries and frameworks, making it easier to address complex tasks while maintaining code readability and maintainability.
 
