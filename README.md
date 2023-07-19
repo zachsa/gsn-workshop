@@ -412,7 +412,7 @@ docker run --rm --name gsn gsn-tut
 # And that's a wrap
 Let me know if there are any questions! If there is still time, some ideas for next steps:
 
-- Publish a repository as a website using GitHub pages. Yet another take on the typical HTTP file-serving stack, GitHub provides a mechanism for turning into repository into a beautiful website using [GitHub Pages](https://pages.github.com/). In this case your README.md file will either be formatted as a website (as is the case of this tutorial - https://zachsa.github.io/gsn-workshop/), or you can serve your own HTML / CSS / JS. 
+- Publish a repository as a website using GitHub pages. Yet another take on the typical HTTP file-serving stack, GitHub provides a mechanism for turning into repository into a beautiful website using [GitHub Pages](https://pages.github.com/). In this case your README.md file will either be formatted as a website (as is the case of this tutorial - https://zachsa.github.io/gsn-workshop/), or you can serve your own HTML / CSS / JS. Note that you can even assign your own domain name to a GitHub pages site!
 - We could generate a website with charts using ChatGPT (and GitHub pages)
 - We could look more into containerization Docker - how Docker works, and how to include it in GitHub Actions workflows
 
