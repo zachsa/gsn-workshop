@@ -383,6 +383,9 @@ In this repository, you can generate a list of dependencies using `pip freeze`:
 
 ```sh
 pip freeze > requirements.txt
+
+# or some variation thereof. For example:
+pipenv run pip freeze > requirements.txt
 ```
 
 Commit this file to the git index so that it's accessible in deployment/execution environments in the future. Then, on the server that you would like to execute your program (for example [script.py](/script.py)), first install dependencies listed in `requirements.txt` and then execute the program:
@@ -398,6 +401,9 @@ Most operating systems come with Python installed. If a Python script makes use 
 Dockerize (and run) [script.py](/script.py) with the following commands:
 
 ```sh
+# First update requirements.txt
+
+# Then build and run the Docker image
 docker build -t gsn-tut .
 docker run --rm --name gsn gsn-tut
 ```
