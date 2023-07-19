@@ -1,7 +1,7 @@
 # HTTP Party: A Quirky Adventure in Data Retrieval with cURL and Python
 When it comes to accessing data over the web programmatically, most data providers, including those I've encountered while working at SAEON, serve their content over the HTTP protocol. HTTP, the language of the web, is a formally defined protocol for exchanging web pages, files, and other information across dispersed IT infrastructure.
 
-In the workshop “HTTP Party: A Quirky Adventure in Data Retrieval with cURL and Python”, HTTP is explained in the context of accessing third-party data programmatically using Python and similar tools. We explore how to effectively download files from HTTP file servers and leveraging the flexibility of HTTP generally.
+In the workshop “HTTP Party: A Quirky Adventure in Data Retrieval with cURL and Python”, HTTP is explained in the context of accessing third-party data programmatically using Python and similar tools. We explore how to effectively download files from HTTP file servers and leverage the flexibility of HTTP generally.
 
 Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable techniques for programmatically accessing data, and explore the potential of leveraging tools like ChatGPT to generate code tailored to your needs. Whether you are a data enthusiast, developer, or researcher, this workshop equips you with practical knowledge and some useful code snippets as a future reference.
 
@@ -97,7 +97,7 @@ This may seem pretty amazing - that ChatGPT can generate this working HTTP serve
 
 ```Python
 # PROMPT
-# Please provide a simple Python web server example using the built-in http.server and socketserver modules that illustrates which layers of the OSI model Python can interact with? Please include comments in the code that explain which OSI layer each part of the code corresponds to. The application layer protocol should be HTTP and respond with a simple "Hello world". Use the aiohttp library to implement the web server so that requests are handled concurrently
+# Please provide a simple Python web server example that illustrates which layers of the OSI model Python can interact with? Please include comments in the code that explain which OSI layer each part of the code corresponds to. The application layer protocol should be HTTP and respond with a simple "Hello world". Use the aiohttp library to implement the web server so that requests are handled concurrently
 from aiohttp import web
 
 
@@ -248,7 +248,7 @@ With this in mind, let's compose a letter to Mnemosyne, requesting a listing of 
 |                                                      |
 |    /somisana/algoa-bay/5-day-forecast/202307         |
 |                                                      |
-| I kindly request you to provide the file to me.      |
+| I kindly request you to provide the files to me.     |
 |                                                      |
 | Please ensure the response is in JSON format.        |
 |                                                      |
@@ -269,7 +269,7 @@ And slightly more http-like/technical:
 | At the PATH:                                          |
 |   /somisana/algoa-bay/5-day-forecast/202307           |
 |                                                       |
-| Not the following!                                    |
+| Note the following!                                   |
 |   User-Agent: Mozilla/5.0                             |
 |   Accept-Language: en-US,en;q=0.9                     |
 |   Accept: application/json                            |
@@ -298,7 +298,7 @@ And actually in HTTP speak:
 ```
 
 ## The `cURL` HTTP client
-This command via `cURL` looks like this (piped to `jq` to prettify the output):
+The letters above translate to a `cURL` command that looks like this (piped to `jq` to prettify the output):
 
 **_(1) Get a file listing_**
 
