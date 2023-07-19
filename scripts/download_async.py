@@ -1,6 +1,6 @@
 import os
 import shutil
-from get_filepaths import get_filepaths
+from scripts.mnemosyne import get_filepaths
 import aiohttp
 import asyncio
 import ssl

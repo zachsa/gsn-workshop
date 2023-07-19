@@ -1,7 +1,7 @@
 import os
 import shutil
 import requests
-from get_filepaths import get_filepaths
+from scripts.mnemosyne import get_filepaths
 
 
 def download_files(urls):
