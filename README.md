@@ -24,8 +24,9 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Resources
-- **_[The SAEON Data Portal](https://catalogue.saeon.ac.za)_**: Search and download SAEON's curated datasets
-- **_[Mnemosyne](https://mnemosyne.saeon.ac.za)_**: HTTP file server
+- **_[This tutorial](https://github.com/zachsa/gsn-workshop)_** You are welcome to save/fork this repository for future reference
+- **_[The SAEON Data Portal](https://catalogue.saeon.ac.za)_** Search and download SAEON's curated datasets
+- **_[Mnemosyne](https://mnemosyne.saeon.ac.za)_** HTTP file server
 
 # Initial setup
 This tutorial assumes `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
