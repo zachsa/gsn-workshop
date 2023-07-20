@@ -6,8 +6,8 @@ import asyncio
 import ssl
 
 sslcontext = ssl.create_default_context()
-sslcontext.check_hostname = True
-sslcontext.verify_mode = ssl.CERT_REQUIRED
+sslcontext.check_hostname = False
+sslcontext.verify_mode = ssl.CERT_NONE
 
 MAX_CONCURRENT = 4
 
