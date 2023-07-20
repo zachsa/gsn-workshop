@@ -1,23 +1,7 @@
 import os
 import shutil
 import requests
-import json
-
-def get_filepaths():
-    url = "https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307"
-    headers = {"Accept": "application/json"}
-    
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    
-    data = response.json()
-    
-    forecast = []
-    for item in data:
-        if 'entry' in item and item['entry'].endswith("-t3.nc"):
-            forecast.append("https://mnemosyne.somisana.ac.za" + item['path'])
-
-    return forecast
+from scripts.mnemosyne import get_filepaths
 
 
 def download_files(urls):

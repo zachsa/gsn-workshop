@@ -310,7 +310,7 @@ The letters above translate to a `cURL` command that looks like this (piped to `
 
 ```sh
 # PROMPT
-# Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json", and make the result (which is JSON) readable. Format the cURL command over multiple lines to make it easier to read using jq.
+# Give me a cURL command that makes a request to https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307, specifying the HTTP header "Accept: Application/json", and make the result (which is JSON) easier to read using jq. Format the cURL command over multiple lines.
 
 # CMD
 curl \

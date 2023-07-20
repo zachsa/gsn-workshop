@@ -11,10 +11,10 @@ sslcontext = ssl.create_default_context()
 Update the following lines if you get SSL cert errors, and if the fix
 described at https://github.com/Rapptz/discord.py/issues/5968 doesn't work
 """
-sslcontext.check_hostname = True
-# sslcontext.check_hostname = False
-sslcontext.verify_mode = ssl.CERT_REQUIRED
-# sslcontext.verify_mode = ssl.CERT_NONE
+# sslcontext.check_hostname = True
+sslcontext.check_hostname = False
+# sslcontext.verify_mode = ssl.CERT_REQUIRED
+sslcontext.verify_mode = ssl.CERT_NONE
 
 async def download_file(session, url):
     # Get the filename by splitting on '/' and taking the last element

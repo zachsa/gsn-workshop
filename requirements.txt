@@ -1,4 +1,5 @@
-aiohttp==3.8.4
+aiofiles==23.1.0
+aiohttp==3.8.5
 aiosignal==1.3.1
 async-timeout==4.0.2
 attrs==23.1.0
@@ -8,5 +9,5 @@ frozenlist==1.4.0
 idna==3.4
 multidict==6.0.4
 requests==2.31.0
-urllib3==2.0.3
+urllib3==2.0.4
 yarl==1.9.2

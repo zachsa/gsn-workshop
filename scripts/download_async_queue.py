@@ -1,31 +1,21 @@
 import os
 import shutil
-import requests
+from scripts.mnemosyne import get_filepaths
 import aiohttp
 import asyncio
 import ssl
 
 sslcontext = ssl.create_default_context()
+"""
+Update the following lines if you get SSL cert errors, and if the fix
+described at https://github.com/Rapptz/discord.py/issues/5968 doesn't work
+"""
+# sslcontext.check_hostname = True
 sslcontext.check_hostname = False
+# sslcontext.verify_mode = ssl.CERT_REQUIRED
 sslcontext.verify_mode = ssl.CERT_NONE
 
 MAX_CONCURRENT = 4
-
-def get_filepaths():
-    url = "https://mnemosyne.somisana.ac.za/somisana/algoa-bay/5-day-forecast/202307"
-    headers = {"Accept": "application/json"}
-    
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    
-    data = response.json()
-    
-    forecast = []
-    for item in data:
-        if 'entry' in item and item['entry'].endswith("-t3.nc"):
-            forecast.append("https://mnemosyne.somisana.ac.za" + item['path'])
-
-    return forecast
 
 
 async def download_file(session, url):
