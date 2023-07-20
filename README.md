@@ -12,6 +12,7 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
 
 - [Resources](#resources)
 - [Initial setup](#initial-setup)
+  - [Windows / Mac](#windows--mac)
 - [HTTP and the TCP/IP internet stack](#http-and-the-tcpip-internet-stack)
     - [The TCP/IP model](#the-tcpip-model)
 - [HTTP clients](#http-clients)
@@ -30,9 +31,7 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
 - **_[Mnemosyne](https://mnemosyne.saeon.ac.za)_** - HTTP file server
 
 # Initial setup
-TODO - Mac and Windows
-
-This tutorial assumes `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
+This tutorial assumes a Linux (Ubuntu 22.04) environment with `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
 ```sh
 sudo apt update
 
@@ -43,6 +42,9 @@ sudo apt install jq -y
 pip install requests
 pip install aiohttp
 ```
+
+## Windows / Mac
+For Windows and Mac users, running the Python code examples should largely be similar. The `curl` command should work on Mac and Command prompt in Windows, omit JSON formatting using the `jq` library (or install it the OS-specific way).
 
 # HTTP and the TCP/IP internet stack
 I was taught to think of web development in terms of layers, with each layer an abstraction over various parts of the software and physical components of web-related infrastructure. Basically, it's nice to think in terms of models to represent how information is transferred between computers. One such model is the Open Systems Interconnection (OSI) model:
