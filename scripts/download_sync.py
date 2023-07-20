@@ -19,10 +19,6 @@ def get_filepaths():
 
     return forecast
 
-if __name__ == '__main__':
-    paths = get_filepaths()
-    print(json.dumps(paths, indent=2))
-
 
 def download_files(urls):
     # Check if the output directory exists, if so, remove it
