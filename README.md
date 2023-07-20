@@ -30,6 +30,8 @@ Join us for a comprehensive (but quick!) walkthrough of HTTP, learn valuable tec
 - **_[Mnemosyne](https://mnemosyne.saeon.ac.za)_** - HTTP file server
 
 # Initial setup
+TODO - Mac and Windows
+
 This tutorial assumes `cURL` and `Python 3.10.6` (other versions will likely work) is available on your PC. In addition, please install the following
 ```sh
 sudo apt update
